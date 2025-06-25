@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-1@odcs(eiqk&9boie-1gu#$hdxkrsu$jo(8^v4ra2k=nk=4f!3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -39,9 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phonenumber_field',
     'corsheaders',
+    'core',
     'auth_app',
+    'offers_app',
+    'orders_app',
+    'reviews_app'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -62,6 +65,8 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
+ROOT_URLCONF = 'core.urls'
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -73,7 +78,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -96,6 +100,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -108,6 +113,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'auth_app.validators.CustomPasswordValidator',  # your custom validator
+    },
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
