@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from orders_app.models import Offer
+from offers_app.models import Offer
 
 class Review(models.Model):
     offer = models.ForeignKey(

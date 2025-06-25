@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
-from auth_app.models import UserProfile
+# from rest_framework.validators import UniqueValidator
+from auth_app.models import Profile
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import MinLengthValidator
-from validators import CustomPhoneValidator, CustomPasswordValidator
+from auth_app.validators import CustomPhoneValidator, CustomPasswordValidator
 from django.contrib.auth import authenticate
 
 

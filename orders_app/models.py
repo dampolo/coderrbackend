@@ -35,7 +35,7 @@ class Order(models.Model):
         choices=OfferType, 
         default=Status.IN_PROGRESS)
     status = models.CharField(
-        max_length=10,
+        max_length=15,
         choices=Status,
         default=Status.IN_PROGRESS
     )

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'auth_app',
     'offers_app',
     'orders_app',
-    'reviews_app'
+    'reviews_app',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
