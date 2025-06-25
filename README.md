@@ -35,6 +35,7 @@ Make sure you have Python 3.13 or higher and pip installed.
 4. Configure the database:  
    Run the migrations to initialize the database:  
    `python manage.py migrate`
+   
    `python manage.py makemigrations`
 
 5. Start the development server:  
