@@ -38,6 +38,7 @@ Make sure you have Python 3.13 or higher and pip installed.
 
 5. Start the development server:  
    `python manage.py runserver`
+   
    `python manage.py makemigrations`
 
 ## Troubleshooting
