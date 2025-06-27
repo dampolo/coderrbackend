@@ -50,3 +50,10 @@ If you encounter issues, check the following:
 ## Contributors
 Damian Poloczek
 
+## LINKS
+
+`https://cdn.developerakademie.com/courses/Backend/EndpointDoku/index.html?name=coderr`
+
+`https://docs.google.com/document/d/1-gUz-skb24UTLAiY5Y-wYDB6GEYI4H9vnxATo-2QsOM/edit?tab=t.0#heading=h.oeodsmlvkdaa`
+
+`https://coderr.damianpoloczek.com/`
