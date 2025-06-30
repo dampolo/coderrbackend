@@ -1,12 +1,27 @@
 from rest_framework import serializers
-# from rest_framework.validators import UniqueValidator
 from auth_app.models import Profile
-from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import MinLengthValidator
-from auth_app.validators import CustomPhoneValidator, CustomPasswordValidator
+from auth_app.validators import CustomPasswordValidator
 from django.contrib.auth import authenticate
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        username = data.get("username", "").lower()
+        password = data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise serializers.ValidationError({
+                "message": "Oops! Wrong password or username. Please try again."  # <-- your custom message
+            })
+
+        data["user"] = user
+        return data
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -68,3 +83,21 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        username = data.get("username", "").lower()
+        password = data.get("password")
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise serializers.ValidationError({
+                "message": "Oops! Wrong password or username. Please try again."  # <-- your custom message
+            })
+
+        data["user"] = user
+        return data

@@ -1,6 +1,6 @@
 from rest_framework import generics
 from auth_app.models import Profile
-from .serializer import RegistrationSerializer
+from .serializer import RegistrationSerializer, LoginSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
@@ -11,6 +11,30 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from phonenumber_field.phonenumber import PhoneNumber
 
+class CustomLoginView(ObtainAuthToken):
+    permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            user = serializer.validated_data["user"]
+            token, created = Token.objects.get_or_create(user=user)
+            data = {
+                "token": token.key,
+                "username": user.username,
+                "email": user.email,
+                "id": user.id,
+            }
+            return Response(data, status=status.HTTP_202_ACCEPTED)
+        field_names = [
+            "username", "password"
+        ]
+        for field in field_names:
+            if field in serializer.errors:
+                return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
