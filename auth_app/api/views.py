@@ -10,6 +10,8 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from phonenumber_field.phonenumber import PhoneNumber
+from django.utils.timezone import now
+
 
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
@@ -20,6 +22,11 @@ class CustomLoginView(ObtainAuthToken):
         data = {}
         if serializer.is_valid():
             user = serializer.validated_data["user"]
+
+             # Update last_login manually since you're not calling login()
+            user.last_login = now()
+            user.save(update_fields=["last_login"])
+
             token, created = Token.objects.get_or_create(user=user)
             data = {
                 "token": token.key,

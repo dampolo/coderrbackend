@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import MinLengthValidator
 from auth_app.validators import CustomPasswordValidator
 from django.contrib.auth import authenticate
+from django.utils.timezone import now
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -22,6 +23,7 @@ class LoginSerializer(serializers.Serializer):
 
         data["user"] = user
         return data
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
