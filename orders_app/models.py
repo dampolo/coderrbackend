@@ -19,7 +19,7 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name="customer_offers"
     )
-    
+
     business_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
