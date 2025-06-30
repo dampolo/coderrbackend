@@ -1,7 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from .views import RegistrationView, CustomLoginView
 from rest_framework.authtoken.views import obtain_auth_token
-
 
 urlpatterns = [
     path("registration/", RegistrationView.as_view(), name="registration"),

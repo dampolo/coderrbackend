@@ -103,3 +103,21 @@ class LoginSerializer(serializers.Serializer):
 
         data["user"] = user
         return data
+    
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "file",
+            "location",
+            "tel",
+            "description",
+            "working_hours",
+            "type",
+            "email",
+            "created_at"
+        ]

@@ -19,12 +19,16 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter 
+from auth_app.api.views import ProfileViewSet
+
+router = DefaultRouter()
+router.register(r'', ProfileViewSet, basename='profile')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/auth/", include("auth_app.api.urls")),
-    # path("api/offers/", include("offers_app.api.urls")),
-    # path("api/orders/", include("orders_app.api.urls"))
+    path("api/profile/", include(router.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

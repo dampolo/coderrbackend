@@ -1,17 +1,17 @@
 from rest_framework import generics
 from auth_app.models import Profile
-from .serializer import RegistrationSerializer, LoginSerializer
+from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import status
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from phonenumber_field.phonenumber import PhoneNumber
 from django.utils.timezone import now
-
+from rest_framework import viewsets
 
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
@@ -69,3 +69,6 @@ class RegistrationView(APIView):
                 return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
