@@ -3,7 +3,7 @@ from .views import OfferViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
-router.register(r'', OfferViewSet, basename='orders')
+router.register(r'offers', OfferViewSet, basename='offers')
 
 urlpatterns = [
     path('', include(router.urls))
