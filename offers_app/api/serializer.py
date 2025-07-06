@@ -1,18 +1,32 @@
 from rest_framework import serializers
 from offers_app.models import Offer, OfferDetails
-from django.conf import settings
+from rest_framework.reverse import reverse
 
 class OfferDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OfferDetails
-        fields = ["title", 
+        fields = [
+                  "id", 
+                  "title", 
                   "revisions", 
                   "delivery_time_in_days", 
                   "price", 
-                  "features"] #this is hwat I can see
+                  "features",
+                  "offer_type"] #this is hwat I can see
+        
+class OfferDetailsLinkSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OfferDetails
+        fields = ["id", "url"]
+    
+    def get_url(self, obj):
+        request = self.context.get("request")
+        return reverse("offerdetails-detail", args=[obj.id], request=request)
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = OfferDetailsSerializer(many=True)
+    details = OfferDetailsLinkSerializer(many=True, read_only=True)
     user_details = serializers.SerializerMethodField()
 
     class Meta:
@@ -24,6 +38,7 @@ class OfferSerializer(serializers.ModelSerializer):
                   "image", 
                   "description",
                   "created_at",
+                  "updated_at",
                   "details",
                   "min_price",
                   "min_delivery_time",
@@ -33,7 +48,6 @@ class OfferSerializer(serializers.ModelSerializer):
         read_only_fields = ["user_details", "min_price", "min_delivery_time"]
 
     def get_user_details(self, obj):
-        print(obj.user.last_name)
         return {
             "first_name": obj.user.first_name,
             "last_name": obj.user.last_name,
