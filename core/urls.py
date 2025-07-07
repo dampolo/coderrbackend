@@ -20,17 +20,20 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter 
-from auth_app.api.views import ProfileViewSet
+from auth_app.api.views import ProfileViewSet, ProfilesCustomerViewSet, ProfilesBusinessViewSet
 
 router = DefaultRouter()
-router.register(r'', ProfileViewSet, basename='profile')
+router.register(r'profile', ProfileViewSet, basename='profile')
+router.register(r'profiles/customer', ProfilesCustomerViewSet, basename='profiles-customer')
+router.register(r'profiles/business', ProfilesBusinessViewSet, basename='profiles-business')
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/auth/", include("auth_app.api.urls")),
-    path("api/profile/", include(router.urls)),
+    path("api/", include(router.urls)),  # This now includes all 3 ViewSets properly
     path("api/", include("offers_app.api.urls")),
-
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

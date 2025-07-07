@@ -123,3 +123,37 @@ class ProfileSerializer(serializers.ModelSerializer):
             "email",
             "created_at"
         ]
+
+class ProfileCustomSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='id')
+
+    class Meta:
+        model = Profile
+        fields = [
+            "user",
+            "username",
+            "first_name",
+            "last_name",
+            "file",
+            "updated_at",
+            "type"
+        ]
+
+        
+class ProfileBusinessSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='id')
+
+    class Meta:
+        model = Profile
+        fields = [
+            "user",
+            "username",
+            "first_name",
+            "last_name",
+            "file",
+            "location",
+            "tel",
+            "description",
+            "working_hours",
+            "type"
+        ]

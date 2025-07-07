@@ -1,6 +1,6 @@
 from rest_framework import generics
 from auth_app.models import Profile
-from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer
+from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer, ProfileCustomSerializer, ProfileBusinessSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
@@ -72,3 +72,15 @@ class RegistrationView(APIView):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+class ProfilesCustomerViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ProfileCustomSerializer
+    
+    def get_queryset(self):
+        return Profile.objects.filter(type="customer")
+
+class ProfilesBusinessViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ProfileBusinessSerializer
+    
+    def get_queryset(self):
+        return Profile.objects.filter(type="business")

@@ -9,4 +9,3 @@ router.register(r'offerdetails', OfferDetailsViewSet, basename='offerdetails')
 urlpatterns = [
     path('', include(router.urls))
 ]
-
