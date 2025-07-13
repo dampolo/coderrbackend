@@ -34,6 +34,7 @@ urlpatterns = [
     path("api/auth/", include("auth_app.api.urls")),
     path("api/", include(router.urls)),  # This now includes all 3 ViewSets properly
     path("api/", include("offers_app.api.urls")),
+    path("api/", include("orders_app.api.urls"))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
