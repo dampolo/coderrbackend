@@ -37,7 +37,6 @@ class OrderSerializer(serializers.ModelSerializer):
             "price",
             "features",
             "offer_type",
-            "status",
             "created_at",
             "updated_at"
         ]
@@ -63,6 +62,3 @@ class OrderSerializer(serializers.ModelSerializer):
             # add any other fields you're using
         )
         return order
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
