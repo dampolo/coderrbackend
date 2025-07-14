@@ -16,3 +16,10 @@ class OrderCreateFromOfferView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
         return Response(self.get_serializer(order).data, status=status.HTTP_201_CREATED)
+    
+class OrderCountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, business_user_id):
+        count = Order.objects.filter(business_user_id=business_user_id, status='in_progress').count()
+        return Response({"order_count": count})
