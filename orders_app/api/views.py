@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 class OrderCreateFromOfferView(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
@@ -18,8 +18,13 @@ class OrderCreateFromOfferView(viewsets.ModelViewSet):
         return Response(self.get_serializer(order).data, status=status.HTTP_201_CREATED)
     
 class OrderCountView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, business_user_id):
-        count = Order.objects.filter(business_user_id=business_user_id, status='in_progress').count()
+        count = Order.objects.filter(business_user_id=business_user_id, status="in_progress").count()
         return Response({"order_count": count})
+    
+class CompletedOrderCountView(APIView):
+    def get(self, request, business_user_id):
+        count = Order.objects.filter(business_user_id=business_user_id, status="completed").count()
+        return Response({"completed_order_count": count})
