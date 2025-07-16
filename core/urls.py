@@ -21,6 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter 
 from auth_app.api.views import ProfileViewSet, ProfilesCustomerViewSet, ProfilesBusinessViewSet
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 router = DefaultRouter()
 router.register(r'profile', ProfileViewSet, basename='profile')
@@ -28,13 +29,18 @@ router.register(r'profiles/customer', ProfilesCustomerViewSet, basename='profile
 router.register(r'profiles/business', ProfilesBusinessViewSet, basename='profiles-business')
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/auth/", include("auth_app.api.urls")),
     path("api/", include(router.urls)),  # This now includes all 3 ViewSets properly
     path("api/", include("offers_app.api.urls")),
-    path("api/", include("orders_app.api.urls"))
-]
+    path("api/", include("orders_app.api.urls")),
+    path("api/", include("reviews_app.api.urls")),
+    path('silk/', include('silk.urls', namespace='silk'))
+
+] + debug_toolbar_urls()
+
+
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

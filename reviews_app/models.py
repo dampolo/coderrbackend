@@ -3,10 +3,6 @@ from django.conf import settings
 from offers_app.models import Offer
 
 class Review(models.Model):
-    offer = models.ForeignKey(
-        Offer, 
-        related_name="reviews", 
-        on_delete=models.CASCADE)
     business_user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="received_reviews",
