@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 
 class ReviewSerializer(serializers.ModelSerializer):
     reviewer = serializers.SerializerMethodField(read_only=True)
-    # print(reviewer)
+
     class Meta:
         model = Review
         fields = [
@@ -24,6 +24,14 @@ class ReviewSerializer(serializers.ModelSerializer):
         ]
 
     def get_reviewer(self, obj):
+        user = obj.reviewer
         return {
-            "id": obj.reviewer.id
-        }
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+        }        
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        validated_data["reviewer"] = request.user
+        return super().create(validated_data)

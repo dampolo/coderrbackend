@@ -4,10 +4,14 @@ from .serializer import ReviewSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 
-class CreateReviewView(viewsets.ModelViewSet):
+class CreateReviewView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+# serializer.is_valid() or serializer.save()
+# DRF’s ModelViewSet already handles all of that internally for standard actions like .create(), .update(), etc.
