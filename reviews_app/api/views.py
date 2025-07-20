@@ -5,10 +5,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from reviews_app.permissions import IsReviewerOrReadOnly
 
 
 class CreateReviewView(ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsReviewerOrReadOnly]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 

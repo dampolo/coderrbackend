@@ -22,7 +22,8 @@ class ReviewSerializer(serializers.ModelSerializer):
             "id",
             "created_at",
             "updated_at",
-            "reviewer"
+            "reviewer",
+            "business_user"
         ]
 
     def get_reviewer(self, obj):
