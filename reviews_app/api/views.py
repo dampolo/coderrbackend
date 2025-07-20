@@ -17,7 +17,7 @@ class CreateReviewView(ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['business_user', 'reviewer']
     ordering_fields = ['updated_at', 'rating']
-    ordering = ['-updated_at']
+    ordering = ['-updated_at'] #defult
 
 
 # serializer.is_valid() or serializer.save()
