@@ -5,9 +5,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from orders_app.permissions import IsCustomerType
 
 class OrderCreateFromOfferView(viewsets.ModelViewSet):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsCustomerType]
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
