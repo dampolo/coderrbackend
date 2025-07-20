@@ -1,7 +1,13 @@
 from rest_framework import viewsets
 from offers_app.models import Offer, OfferDetails
+from offers_app.permissions import IsBusinessType
 from .serializer import OfferSerializer, OfferDetailsSerializer
 from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+
 
 class LargeResultsSetPagination(PageNumberPagination):
     page_size = 6
@@ -13,7 +19,11 @@ class OfferDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OfferDetailsSerializer
 
 class OfferViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsBusinessType]
     pagination_class = LargeResultsSetPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['title', 'description']
+    ordering = ['-min_price']
 
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
