@@ -36,6 +36,7 @@ urlpatterns = [
     path("api/", include("offers_app.api.urls")),
     path("api/", include("orders_app.api.urls")),
     path("api/", include("reviews_app.api.urls")),
+    path('api/', include("base_info_app.api.urls")),
     path('silk/', include('silk.urls', namespace='silk'))
 
 ] + debug_toolbar_urls()
