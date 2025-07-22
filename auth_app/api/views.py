@@ -2,19 +2,18 @@ from rest_framework import generics
 from auth_app.models import Profile
 from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer, ProfileCustomSerializer, ProfileBusinessSerializer
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import status
-# from django.contrib.auth.models import User
+from offers_app.permissions import IsBusinessType
 from django.utils.crypto import get_random_string
 from phonenumber_field.phonenumber import PhoneNumber
 from django.utils.timezone import now
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 class CustomLoginView(ObtainAuthToken):
-    permission_classes = [AllowAny]
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -44,8 +43,6 @@ class CustomLoginView(ObtainAuthToken):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegistrationView(APIView):
-    permission_classes = [AllowAny]
-
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
 
@@ -69,18 +66,19 @@ class RegistrationView(APIView):
                 return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
-class ProfilesCustomerViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ProfileCustomSerializer
-    
+class ProfilesCustomerViewSet(ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileCustomSerializer    
     def get_queryset(self):
         return Profile.objects.filter(type="customer")
 
-class ProfilesBusinessViewSet(viewsets.ReadOnlyModelViewSet):
+class ProfilesBusinessViewSet(ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileBusinessSerializer
-    
     def get_queryset(self):
         return Profile.objects.filter(type="business")
