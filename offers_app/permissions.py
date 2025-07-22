@@ -1,11 +1,14 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
 class IsBusinessType(BasePermission):
     """
-    Allows access only to users with type 'business'.
+    Allows safe (read-only) access to everyone, but write access only to 'business' users.
     """
 
     def has_permission(self, request, view):
-        # Make sure the user is authenticated and has a 'type' attribute
+        # Allow safe methods (GET, HEAD, OPTIONS) for all users
+        if request.method in SAFE_METHODS:
+            return True
+        # For write operations, only allow if user is authenticated and type is 'business'
         return bool(request.user and request.user.is_authenticated and getattr(request.user, 'type', None) == 'business')
