@@ -11,7 +11,7 @@ class Profile(AbstractUser):
     email = models.EmailField(max_length=150, unique=True, default=None)
     file = models.ImageField(upload_to='uploads/', blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, default="")
-    tel = PhoneNumberField(blank=True, null=True, default=None)
+    tel = PhoneNumberField(blank=True, default="")
     description = models.TextField(blank=True, default="")
     working_hours = models.CharField(max_length=50, blank=True, default="")
     type = models.CharField(
