@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'silk',
     'rest_framework',
     'django_extensions',
-    'corsheaders',
     'django_filters',
     'core',
     'auth_app',
