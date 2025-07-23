@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from offers_app.models import Offer, OfferDetails
 from offers_app.permissions import IsBusinessType
+from rest_framework.permissions import IsAuthenticated
 from .serializer import OfferSerializer, OfferDetailsSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters

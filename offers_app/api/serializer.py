@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from offers_app.models import Offer, OfferDetails
 from rest_framework.reverse import reverse
+from rest_framework import fields
 
 class OfferDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,8 +27,9 @@ class OfferDetailsLinkSerializer(serializers.ModelSerializer):
         return reverse("offerdetails-detail", args=[obj.id], request=request)
 
 class OfferSerializer(serializers.ModelSerializer):
-    details = OfferDetailsLinkSerializer(many=True, read_only=True)
     user_details = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    details = serializers.SerializerMethodField()
 
     class Meta:
         model = Offer
@@ -45,18 +47,30 @@ class OfferSerializer(serializers.ModelSerializer):
                   "user_details"
                   ]
         
-        read_only_fields = ["user_details", "min_price", "min_delivery_time"]
+        read_only_fields = ["id", "user_details", "min_price", "min_delivery_time"]
 
     def get_user_details(self, obj):
+        user = obj.user
         return {
-            "first_name": obj.user.first_name,
-            "last_name": obj.user.last_name,
-            "username": obj.user.username
-        }
-        
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "username": user.username
+            }
+
+    def get_user(self, obj):
+        return obj.user.id
+    
+    def get_details(self, obj):
+        request = self.context.get("request")
+        view = self.context.get("view")
+        serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
+        return serializer.data
+
     def create(self, validated_data):
         details_data = validated_data.pop("details")
+        request = self.context.get("request")
 
+        validated_data["user"] = request.user
         validated_data["min_price"] = min(d["price"] for d in details_data)
         validated_data["min_delivery_time"] = min(d["delivery_time_in_days"] for d in details_data)
 
