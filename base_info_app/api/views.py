@@ -5,8 +5,11 @@ from django.db.models import Avg
 from auth_app.models import Profile
 from offers_app.models import Offer
 
+from rest_framework.permissions import AllowAny
+
 
 class BaseInfoView(APIView):
+      permission_classes = [AllowAny]
       def get(self, request):
         return Response({
             "review_count": Review.objects.count(),
