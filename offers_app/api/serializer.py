@@ -29,7 +29,7 @@ class OfferDetailsLinkSerializer(serializers.ModelSerializer):
 class OfferSerializer(serializers.ModelSerializer):
     user_details = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    details = serializers.SerializerMethodField()
+    details = OfferDetailsSerializer(many=True)
 
     class Meta:
         model = Offer
@@ -51,7 +51,10 @@ class OfferSerializer(serializers.ModelSerializer):
 
     def get_user_details(self, obj):
         user = obj.user
-        return {
+        view = self.context.get("view")
+
+        if view and hasattr(view, 'action') and view.action != 'retrieve':
+            return {
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "username": user.username
@@ -63,7 +66,13 @@ class OfferSerializer(serializers.ModelSerializer):
     def get_details(self, obj):
         request = self.context.get("request")
         view = self.context.get("view")
-        serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
+
+        # Show full details only for retrieve endpoint
+        if view and hasattr(view, 'action') and view.action == 'retrieve':
+            serializer = OfferDetailsSerializer(obj.details.all(), many=True, context=self.context)
+        else:
+            serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
+
         return serializer.data
 
     def create(self, validated_data):
