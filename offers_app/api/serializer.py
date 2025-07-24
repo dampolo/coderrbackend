@@ -27,9 +27,12 @@ class OfferDetailsLinkSerializer(serializers.ModelSerializer):
         return reverse("offerdetails-detail", args=[obj.id], request=request)
 
 class OfferSerializer(serializers.ModelSerializer):
+
+    details = OfferDetailsSerializer(many=True, write_only=True)
+    details = serializers.SerializerMethodField(read_only=True) #GET
+
     user_details = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    details = OfferDetailsSerializer(many=True)
 
     class Meta:
         model = Offer
@@ -46,8 +49,15 @@ class OfferSerializer(serializers.ModelSerializer):
                   "min_delivery_time",
                   "user_details"
                   ]
-        
         read_only_fields = ["id", "user_details", "min_price", "min_delivery_time"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        view = self.context.get("view")
+        if view and hasattr(view, "action") and view.action == "retrieve":
+            # Remove user_details from output if we're in retrieve view
+            self.fields.pop("user_details", None)
 
     def get_user_details(self, obj):
         user = obj.user
@@ -64,15 +74,7 @@ class OfferSerializer(serializers.ModelSerializer):
         return obj.user.id
     
     def get_details(self, obj):
-        request = self.context.get("request")
-        view = self.context.get("view")
-
-        # Show full details only for retrieve endpoint
-        if view and hasattr(view, 'action') and view.action == 'retrieve':
-            serializer = OfferDetailsSerializer(obj.details.all(), many=True, context=self.context)
-        else:
-            serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
-
+        serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
         return serializer.data
 
     def create(self, validated_data):

@@ -16,7 +16,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     pagination_class = LargeResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['title', 'description']
-    ordering = ['-min_price']
+    # ordering = ['-min_price']
 
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
