@@ -6,8 +6,10 @@ from .serializer import OfferSerializer, OfferDetailsSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from offers_app.pagination import LargeResultsSetPagination
+from rest_framework.permissions import AllowAny
 
 class OfferDetailsViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
     queryset = OfferDetails.objects.all()
     serializer_class = OfferDetailsSerializer
 
@@ -16,7 +18,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     pagination_class = LargeResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['title', 'description']
-    # ordering = ['-min_price']
+    ordering = ['-min_price']
 
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer

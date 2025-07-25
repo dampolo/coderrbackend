@@ -15,6 +15,8 @@ class OfferDetailsSerializer(serializers.ModelSerializer):
                   "features",
                   "offer_type"] #this is hwat I can see
         
+        read_only_fields = ["id"] 
+        
 class OfferDetailsLinkSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
 
@@ -27,10 +29,7 @@ class OfferDetailsLinkSerializer(serializers.ModelSerializer):
         return reverse("offerdetails-detail", args=[obj.id], request=request)
 
 class OfferSerializer(serializers.ModelSerializer):
-
-    details = OfferDetailsSerializer(many=True, write_only=True)
-    details = serializers.SerializerMethodField(read_only=True) #GET
-
+    # details = OfferDetailsSerializer(many=True)
     user_details = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
 
@@ -49,15 +48,7 @@ class OfferSerializer(serializers.ModelSerializer):
                   "min_delivery_time",
                   "user_details"
                   ]
-        read_only_fields = ["id", "user_details", "min_price", "min_delivery_time"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        view = self.context.get("view")
-        if view and hasattr(view, "action") and view.action == "retrieve":
-            # Remove user_details from output if we're in retrieve view
-            self.fields.pop("user_details", None)
+        read_only_fields = ["id", "user", "user_details", "min_price", "min_delivery_time"]
 
     def get_user_details(self, obj):
         user = obj.user
@@ -73,9 +64,18 @@ class OfferSerializer(serializers.ModelSerializer):
     def get_user(self, obj):
         return obj.user.id
     
-    def get_details(self, obj):
-        serializer = OfferDetailsLinkSerializer(obj.details.all(), many=True, context=self.context)
-        return serializer.data
+    def get_fields(self):
+        fields = super().get_fields()
+        request = self.context.get("request")
+
+        if request and request.method == "GET":
+            # Read: minimal serializer with URL
+            fields["details"] = OfferDetailsLinkSerializer(many=True, read_only=True)
+        else:
+            # Write: full serializer
+            fields["details"] = OfferDetailsSerializer(many=True)
+        return fields
+
 
     def create(self, validated_data):
         details_data = validated_data.pop("details")
@@ -91,3 +91,42 @@ class OfferSerializer(serializers.ModelSerializer):
             OfferDetails.objects.create(offer=offer, **detail_data)
         
         return offer
+    
+
+    def update(self, instance, validated_data):
+        details_data = validated_data.pop("details", [])
+        existing_details = {detail.id: detail for detail in instance.details.all()}
+
+        updated_detail_ids = []
+
+        for detail_data in details_data:
+            detail_id = detail_data.get("id")
+
+            if detail_id and detail_id in existing_details:
+                # Update existing detail
+                detail_instance = existing_details[detail_id]
+                for attr, value in detail_data.items():
+                    setattr(detail_instance, attr, value)
+                detail_instance.save()
+                updated_detail_ids.append(detail_id)
+            else:
+                # Create new detail
+                OfferDetails.objects.create(offer=instance, **detail_data)
+
+        # Optionally delete details not in the incoming list
+        for detail_id, detail_instance in existing_details.items():
+            if detail_id not in updated_detail_ids:
+                detail_instance.delete()
+
+        # Update other offer fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # Recalculate min_price and min_delivery_time
+        all_details = instance.details.all()
+        if all_details.exists():
+            instance.min_price = min(d.price for d in all_details)
+            instance.min_delivery_time = min(d.delivery_time_in_days for d in all_details)
+        instance.save()
+
+        return instance
