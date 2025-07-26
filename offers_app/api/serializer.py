@@ -105,8 +105,6 @@ class OfferSerializer(serializers.ModelSerializer):
         details_data = validated_data.pop("details", [])
         existing_details = {detail.id: detail for detail in instance.details.all()}
 
-        updated_detail_ids = []
-
         for detail_data in details_data:
             detail_id = detail_data.get("id")
 
@@ -117,19 +115,9 @@ class OfferSerializer(serializers.ModelSerializer):
                     setattr(detail_instance, attr, value)
                 detail_instance.save()
                 
-                updated_detail_ids.append(detail_id)
             else:
                 # Create new detail
                 OfferDetails.objects.create(offer=instance, **detail_data)
-
-        # Optionally delete details not in the incoming list
-        for detail_id, detail_instance in existing_details.items():
-            if detail_id not in updated_detail_ids:
-                detail_instance.delete()
-
-        # Update other offer fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
 
         # Recalculate min_price and min_delivery_time
         all_details = instance.details.all()

@@ -32,5 +32,5 @@ class OfferDetails(models.Model):
     offer_type = models.CharField(max_length=10, choices=OfferType, default=OfferType.BASIC)
 
     def __str__(self):
-        return f"{self.offer_type} - {self.title}"
+        return f"{self.title} - {self.offer_type}"
     
