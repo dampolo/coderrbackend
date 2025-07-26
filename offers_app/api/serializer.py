@@ -77,10 +77,10 @@ class OfferSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
 
         if request and request.method == "GET":
-            # Read: minimal serializer with URL
+            # Read: minimal serializer with ID und URL
             fields["details"] = OfferDetailsLinkSerializer(many=True, read_only=True)
         else:
-            # Write: full serializer
+            # Write: full serializer with all details
             fields["details"] = OfferDetailsSerializer(many=True)
         return fields
 
