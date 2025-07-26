@@ -10,7 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
 class CreateReviewView(ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsReviewerOrReadOnly]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
