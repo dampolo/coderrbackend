@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 from rest_framework import fields
 
 class OfferDetailsSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False, allow_null=True)
+
     class Meta:
         model = OfferDetails
         fields = [
@@ -14,8 +16,6 @@ class OfferDetailsSerializer(serializers.ModelSerializer):
                   "price", 
                   "features",
                   "offer_type"] #this is hwat I can see
-        
-        read_only_fields = ["id"] 
         
 class OfferDetailsLinkSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
@@ -29,7 +29,7 @@ class OfferDetailsLinkSerializer(serializers.ModelSerializer):
         return reverse("offerdetails-detail", args=[obj.id], request=request)
 
 class OfferSerializer(serializers.ModelSerializer):
-    # details = OfferDetailsSerializer(many=True)
+    details = OfferDetailsSerializer(many=True)
     user_details = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
 
@@ -49,6 +49,14 @@ class OfferSerializer(serializers.ModelSerializer):
                   "user_details"
                   ]
         read_only_fields = ["id", "user", "user_details", "min_price", "min_delivery_time"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        view = self.context.get("view")
+        if view and hasattr(view, "action") and view.action == "retrieve":
+            # Remove user_details from output if we're in retrieve view
+            self.fields.pop("user_details", None)
 
     def get_user_details(self, obj):
         user = obj.user
@@ -94,6 +102,8 @@ class OfferSerializer(serializers.ModelSerializer):
     
 
     def update(self, instance, validated_data):
+        print("INST:", instance)
+        print("validated_data:", validated_data)
         details_data = validated_data.pop("details", [])
         existing_details = {detail.id: detail for detail in instance.details.all()}
 
@@ -108,6 +118,7 @@ class OfferSerializer(serializers.ModelSerializer):
                 for attr, value in detail_data.items():
                     setattr(detail_instance, attr, value)
                 detail_instance.save()
+                
                 updated_detail_ids.append(detail_id)
             else:
                 # Create new detail
