@@ -4,21 +4,45 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 
 from auth_app.models import Profile
+from reviews_app.models import Review
+from reviews_app.api.serializer import ReviewSerializer
 
 class ReviewsTests(APITestCase):
 
     def setUp(self):
-        # Create a user
+        # Create customer user
         self.user = Profile.objects.create_user(
             username='testuser',
             password='pass123',
-            email='test@example.com'
+            email='test@example.com',
+            type='customer'
         )
+
+        # Create business user
+        self.business_user = Profile.objects.create_user(
+            username='bizuser',
+            password='pass123',
+            email='biz@example.com',
+            type='business'
+        )
+
 
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.review = Review.objects.create(business_user=self.business_user, reviewer=self.user, rating=5, description="Alles Top" )
 
-    def test_get_url(self):
+    def test_get_review_all_url(self):
         url = reverse('reviews-list')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_review_detail(self):
+        url = reverse('reviews-detail', kwargs={'pk': self.review.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_review_data(self):
+        url = reverse('reviews-detail', kwargs={'pk': self.review.id})
+        response = self.client.get(url)
+        expected_data = ReviewSerializer(self.review).data
+        self.assertEqual(response.data, expected_data)
