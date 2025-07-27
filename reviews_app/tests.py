@@ -1,5 +1,5 @@
 from django.urls import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
@@ -26,10 +26,30 @@ class ReviewsTests(APITestCase):
             type='business'
         )
 
-
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.review = Review.objects.create(business_user=self.business_user, reviewer=self.user, rating=5, description="Alles Top" )
+
+        # Token auth
+        self.token = Token.objects.create(user=self.user)
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+    def test_list_post_review(self):
+
+        # New business user for this test OTHERWISE you receive error "You have already reviewed this user."
+        other_business = Profile.objects.create_user(
+            username='newbiz',
+            password='pass123',
+            email='newbiz@example.com',
+            type='business'
+        )
+
+        url = reverse('reviews-list')
+        data = {
+                'business_user': other_business.id,
+                'rating': 5, 
+                'description': 'Alles Top' }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_get_review_all_url(self):
         url = reverse('reviews-list')
