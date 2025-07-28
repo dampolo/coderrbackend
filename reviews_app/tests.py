@@ -6,7 +6,10 @@ from rest_framework.authtoken.models import Token
 from auth_app.models import Profile
 from reviews_app.models import Review
 from reviews_app.api.serializer import ReviewSerializer
+from rest_framework.exceptions import ValidationError
 
+
+#Integration Tests
 class ReviewsTests(APITestCase):
 
     def setUp(self):
@@ -66,3 +69,21 @@ class ReviewsTests(APITestCase):
         response = self.client.get(url)
         expected_data = ReviewSerializer(self.review).data
         self.assertEqual(response.data, expected_data)
+
+
+#Unit Test
+class ReviewSerializerRatingTest(APITestCase):
+    def test_valid_rating(self):
+        serializer = ReviewSerializer()
+        for valid_rating in range(1, 6):
+            self.assertEqual(serializer.validate_rating(valid_rating), valid_rating)
+            
+    def test_validate_rating_below_range(self):
+        serializer = ReviewSerializer()
+        with self.assertRaises(ValidationError):
+            serializer.validate_rating(0)
+
+    def test_validate_rating_above_range(self):
+        serializer = ReviewSerializer()
+        with self.assertRaises(ValidationError):
+            serializer.validate_rating(6)
