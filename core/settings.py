@@ -70,6 +70,8 @@ CORS_ALLOWED_ORIGINS = [
 
   'http://localhost:5500',
 
+  'https://coderr.damianpoloczek.com',
+
 ]
 
 ROOT_URLCONF = 'core.urls'
