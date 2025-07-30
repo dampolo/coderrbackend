@@ -9,7 +9,7 @@ from offers_app.pagination import LargeResultsSetPagination
 from rest_framework.permissions import AllowAny
 
 class OfferDetailsViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = OfferDetails.objects.all()
     serializer_class = OfferDetailsSerializer
 
