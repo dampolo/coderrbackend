@@ -31,7 +31,7 @@ router.register(r'profiles/business', ProfilesBusinessViewSet, basename='profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/auth/", include("auth_app.api.urls")),
+    path("api/", include("auth_app.api.urls")),
     path("api/", include(router.urls)),  # This now includes all 3 ViewSets properly
     path("api/", include("offers_app.api.urls")),
     path("api/", include("orders_app.api.urls")),
