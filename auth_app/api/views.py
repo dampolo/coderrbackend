@@ -33,7 +33,7 @@ class CustomLoginView(ObtainAuthToken):
                 "email": user.email,
                 "user_id": user.id,
             }
-            return Response(data, status=status.HTTP_202_ACCEPTED)
+            return Response(data, status=status.HTTP_200_OK)
         field_names = [
             "username", "password"
         ]
