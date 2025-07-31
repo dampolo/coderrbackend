@@ -2,12 +2,11 @@ from rest_framework import generics
 from auth_app.models import Profile
 from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer, ProfileCustomSerializer, ProfileBusinessSerializer
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import status
-from offers_app.permissions import IsBusinessType
 from django.utils.crypto import get_random_string
 from phonenumber_field.phonenumber import PhoneNumber
 from django.utils.timezone import now
@@ -43,6 +42,7 @@ class CustomLoginView(ObtainAuthToken):
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 class RegistrationView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
 
