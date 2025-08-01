@@ -41,10 +41,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         ]
     
     def validate_password(self, value):
-        repeated_pw = self.initial_data.get("repeated_password")        
-        # Custom complexity validation        
-        if repeated_pw and value != repeated_pw:
-            raise serializers.ValidationError("Passwords don't match.")
+        if value != self.initial_data.get("repeated_password"):
+            raise serializers.ValidationError("Passwords do not match.")
         return value
     
     def create(self, validated_data):
