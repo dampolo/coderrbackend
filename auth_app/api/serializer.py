@@ -39,9 +39,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             "last_name",
             "type",
         ]
-        extra_kwargs = {
-            "password": {"write_only": True}
-        }
     
     def validate_password(self, value):
         repeated_pw = self.initial_data.get("repeated_password")        
