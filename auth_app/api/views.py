@@ -3,6 +3,7 @@ from auth_app.models import Profile
 from .serializer import RegistrationSerializer, LoginSerializer, ProfileSerializer, ProfileCustomSerializer, ProfileBusinessSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from auth_app.permissions import IsOwner
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -67,6 +68,7 @@ class RegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileViewSet(ModelViewSet):
+    permission_classes = [IsOwner]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
