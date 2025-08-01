@@ -2,7 +2,7 @@ from rest_framework import serializers
 from reviews_app.models import Review
 from auth_app.models import Profile
 from django.shortcuts import get_object_or_404
-from django.core.exceptions import ValidationError as DjangoValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 
 class ReviewSerializer(serializers.ModelSerializer):
     reviewer = serializers.SerializerMethodField(read_only=True)
@@ -41,7 +41,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         business_user = validated_data.get("business_user")
 
         if Review.objects.filter(reviewer=user, business_user=business_user).exists():
-            raise serializers.ValidationError("You have already reviewed this user.")
+            raise PermissionDenied("You have already reviewed this user.")
+        
             
         validated_data["reviewer"] = request.user
         return super().create(validated_data)

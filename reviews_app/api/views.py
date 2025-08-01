@@ -18,5 +18,7 @@ class CreateReviewView(ModelViewSet):
     ordering_fields = ['updated_at', 'rating']
     ordering = ['-updated_at'] #defult
 
+    
+
 # serializer.is_valid() or serializer.save()
 # DRF’s ModelViewSet already handles all of that internally for standard actions like .create(), .update(), etc.
