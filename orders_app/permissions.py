@@ -14,7 +14,8 @@ class IsOrderAccessAllowed(BasePermission):
         user = request.user
         user_type = getattr(user, 'type', None)
 
-        if not user.is_authenticated:
+        # Block unauthenticated users entirely
+        if not user or not user.is_authenticated:
             return False
 
         if request.method == 'POST':
@@ -24,8 +25,11 @@ class IsOrderAccessAllowed(BasePermission):
         if request.method in ['PUT', 'PATCH']:
             # Only business users can update orders
             return user_type == 'business'
+        
+        if request.method == 'DELETE':
+            return user.is_staff
 
-        # Allow other methods like GET, DELETE by default
+        # Allow GET and other safe methods to any authenticated user
         return True
     
     def has_object_permission(self, request, view, obj):
