@@ -8,7 +8,7 @@ class Profile(AbstractUser):
         CUSTOMER = "customer", _("Customer")
         BUSINESS = "business", _("Business")
 
-    email = models.EmailField(max_length=150, unique=True, default=None)
+    email = models.EmailField(max_length=150, default=None)
     file = models.ImageField(upload_to='uploads/', blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, default="")
     tel = PhoneNumberField(blank=True, default="")
