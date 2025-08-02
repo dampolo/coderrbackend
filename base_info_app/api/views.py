@@ -13,7 +13,7 @@ class BaseInfoView(APIView):
       def get(self, request):
         return Response({
             "review_count": Review.objects.count(),
-            "average_rating": Review.objects.aggregate(Avg("rating", default=0))["rating__avg"],
+            "average_rating": round(Review.objects.aggregate(Avg("rating"))["rating__avg"] or 0, 1),
             "business_profile_count": Profile.objects.filter(type="business").count(),
             "offer_count": Offer.objects.count()
         })
