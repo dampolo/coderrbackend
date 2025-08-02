@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from orders_app.permissions import IsOrderAccessAllowed
+from django.shortcuts import get_object_or_404
+from auth_app.models import Profile
 
 class OrderCreateFromOfferView(viewsets.ModelViewSet):
     permission_classes = [IsOrderAccessAllowed]
@@ -20,10 +22,12 @@ class OrderCreateFromOfferView(viewsets.ModelViewSet):
     
 class OrderCountView(APIView):
     def get(self, request, business_user_id):
+        get_object_or_404(Profile, id=business_user_id, type="business")
         count = Order.objects.filter(business_user_id=business_user_id, status="in_progress").count()
         return Response({"order_count": count})
     
 class CompletedOrderCountView(APIView):
     def get(self, request, business_user_id):
+        get_object_or_404(Profile, id=business_user_id, type="business")
         count = Order.objects.filter(business_user_id=business_user_id, status="completed").count()
         return Response({"completed_order_count": count})
