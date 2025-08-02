@@ -103,7 +103,7 @@ class OfferSerializer(serializers.ModelSerializer):
 
         for detail_data in details_data:
             OfferDetails.objects.create(offer=offer, **detail_data)
-        
+
         return offer
     
 
