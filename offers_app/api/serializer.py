@@ -105,6 +105,9 @@ class OfferSerializer(serializers.ModelSerializer):
         details_data = validated_data.pop("details", [])
         existing_details = {detail.id: detail for detail in instance.details.all()}
 
+        # Update main Offer fields
+        instance = super().update(instance, validated_data)
+
         for detail_data in details_data:
             detail_id = detail_data.get("id")
 
