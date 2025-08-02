@@ -2,6 +2,7 @@ from rest_framework import serializers
 from offers_app.models import Offer, OfferDetails
 from rest_framework.reverse import reverse
 from rest_framework import fields
+from rest_framework.exceptions import ValidationError
 
 class OfferDetailsSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, allow_null=True)
@@ -83,6 +84,11 @@ class OfferSerializer(serializers.ModelSerializer):
             # Write: full serializer with all details
             fields["details"] = OfferDetailsSerializer(many=True)
         return fields
+    
+    def validate_details(self, value):
+        if len(value) != 3:
+            raise ValidationError("Exactly 3 details are required.")
+        return value
 
 
     def create(self, validated_data):
