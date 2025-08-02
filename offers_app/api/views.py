@@ -14,7 +14,7 @@ class OfferDetailsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OfferDetailsSerializer
 
 class OfferViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsBusinessType]
+    permission_classes = [IsBusinessType, IsAuthenticated]
     pagination_class = LargeResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['title', 'description']

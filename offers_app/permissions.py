@@ -7,10 +7,6 @@ class IsBusinessType(BasePermission):
     who are the owner of the offer.
     """
     def has_permission(self, request, view):
-
-        # Allow safe methods (GET, HEAD, OPTIONS) for all users
-        if request.method in SAFE_METHODS:
-            return True
         # For write operations, only allow if user is authenticated and type is 'business'
         return bool(request.user.is_authenticated and getattr(request.user, 'type', None) == 'business')
     
