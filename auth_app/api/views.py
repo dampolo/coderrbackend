@@ -39,7 +39,7 @@ class CustomLoginView(ObtainAuthToken):
         ]
         for field in field_names:
             if field in serializer.errors:
-                return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RegistrationView(APIView):
