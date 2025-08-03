@@ -68,7 +68,7 @@ class RegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileViewSet(ModelViewSet):
-    permission_classes = [IsOwner]
+    permission_classes = [IsOwner, IsAuthenticated]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
