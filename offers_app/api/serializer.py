@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 class OfferDetailsSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, allow_null=True)
+    offer_type = serializers.CharField(required=True, allow_blank=False)
 
     class Meta:
         model = OfferDetails
@@ -116,6 +117,9 @@ class OfferSerializer(serializers.ModelSerializer):
 
         for detail_data in details_data:
             detail_id = detail_data.get("id")
+
+            detail_serializer = OfferDetailsSerializer(data=detail_data)
+            detail_serializer.is_valid(raise_exception=True)
 
             if detail_id and detail_id in existing_details:
                 # Update existing detail
