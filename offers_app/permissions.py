@@ -6,10 +6,7 @@ class IsBusinessType(BasePermission):
     Write access is only allowed to authenticated 'business' users
     who are the owner of the offer.
     """
-    def has_permission(self, request, view):
-        # Always allow safe methods
-        if request.method in SAFE_METHODS:
-            return True
+    def has_permission(self, request, view):        
         # For write operations, only allow if user is authenticated and type is 'business'
         return bool(request.user.is_authenticated and getattr(request.user, 'type', None) == 'business')
     

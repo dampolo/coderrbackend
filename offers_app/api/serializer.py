@@ -86,10 +86,14 @@ class OfferSerializer(serializers.ModelSerializer):
             fields["details"] = OfferDetailsSerializer(many=True)
         return fields
     
-    def validate_details(self, value):
-        if len(value) != 3:
-            raise ValidationError("Exactly 3 details are required.")
-        return value
+    def validate(self, attrs):
+        if not self.partial:
+            details = attrs.get("details", None)
+            if details is None or len(details) != 3:
+                raise serializers.ValidationError({
+                    "details": "Exactly 3 details are required."
+                })
+        return attrs
 
 
     def create(self, validated_data):
@@ -109,28 +113,49 @@ class OfferSerializer(serializers.ModelSerializer):
     
 
     def update(self, instance, validated_data):
+        
         details_data = validated_data.pop("details", [])
-        existing_details = {detail.id: detail for detail in instance.details.all()}
+        is_partial = self.partial
 
         # Update main Offer fields
         instance = super().update(instance, validated_data)
 
-        for detail_data in details_data:
-            detail_id = detail_data.get("id")
+        if details_data is not None:
+            existing_details = {detail.id: detail for detail in instance.details.all()}
 
-            detail_serializer = OfferDetailsSerializer(data=detail_data)
-            detail_serializer.is_valid(raise_exception=True)
+            for detail_data in details_data:
+                detail_id = detail_data.get("id")
 
-            if detail_id and detail_id in existing_details:
-                # Update existing detail
-                detail_instance = existing_details[detail_id]
-                for attr, value in detail_data.items():
-                    setattr(detail_instance, attr, value)
-                detail_instance.save()
-                
-            else:
-                # Create new detail
-                OfferDetails.objects.create(offer=instance, **detail_data)
+                detail_serializer = OfferDetailsSerializer(data=detail_data)
+                detail_serializer.is_valid(raise_exception=True)
+
+                if detail_id and detail_id in existing_details:
+                    # Update existing detail
+                    detail_instance = existing_details[detail_id]
+                    serializer = OfferDetailsSerializer(detail_instance, data=detail_data, partial=is_partial)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+
+                else:
+                    # Match by `offer_type` if `id` not provided
+                    offer_type = detail_data.get("offer_type")
+                    matched = instance.details.filter(offer_type=offer_type).first()
+
+                    if matched:
+                        serializer = OfferDetailsSerializer(matched, data=detail_data, partial=is_partial)
+                        serializer.is_valid(raise_exception=True)
+                        serializer.save()
+                        
+                    else:
+                        # Create new detail
+                        OfferDetails.objects.create(offer=instance, **detail_data)
+        
+        # Do NOT delete any existing details on PATCH
+        if not is_partial:
+            incoming_ids = [d.get("id") for d in details_data if d.get("id")]
+            for existing_id in existing_details:
+                if existing_id not in incoming_ids:
+                    existing_details[existing_id].delete()
 
         # Recalculate min_price and min_delivery_time
         all_details = instance.details.all()
