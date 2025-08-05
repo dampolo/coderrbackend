@@ -26,7 +26,7 @@ class OfferFilter(django_filters.FilterSet):
         fields = ['min_price', 'max_delivery_time']
 
 class OfferViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsBusinessType, IsAuthenticated]
+    permission_classes = [IsBusinessType]
     pagination_class = LargeResultsSetPagination
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     search_fields = ['title', 'description']
