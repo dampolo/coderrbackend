@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'django_filters',
-    'core',
+    'coderr',
     'auth_app',
     'offers_app',
     'orders_app',
@@ -71,7 +71,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'coderr.urls'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -100,7 +100,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = 'coderr.wsgi.application'
 
 
 # Database
