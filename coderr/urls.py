@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter 
 from auth_app.api.views import ProfileViewSet, ProfilesCustomerViewSet, ProfilesBusinessViewSet
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import RedirectView
 
 router = DefaultRouter()
 router.register(r'profile', ProfileViewSet, basename='profile')
@@ -36,7 +37,9 @@ urlpatterns = [
     path("api/", include("offers_app.api.urls")),
     path("api/", include("orders_app.api.urls")),
     path("api/", include("reviews_app.api.urls")),
-    path('api/', include("base_info_app.api.urls"))
+    path('api/', include("base_info_app.api.urls")),
+
+    path("", RedirectView.as_view(url="/api/")), 
 ] + staticfiles_urlpatterns()
 
 
