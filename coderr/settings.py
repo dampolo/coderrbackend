@@ -57,6 +57,8 @@ CSRF_TRUSTED_ORIGINS = [
 
   'http://localhost:5500',
 
+  'https://coderr.damianpoloczek.com',
+
 ]
 
 
@@ -67,7 +69,7 @@ CORS_ALLOWED_ORIGINS = [
 
   'http://localhost:5500',
 
-  'http://coderr.damianpoloczek.com',
+  'https://coderr.damianpoloczek.com',
 
 ]
 
