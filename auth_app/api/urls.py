@@ -3,6 +3,6 @@ from .views import RegistrationView, CustomLoginView, ProfilesCustomerViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
-    path("api/api/registration/", RegistrationView.as_view(), name="registration"),
-    path("api/api/login/", CustomLoginView.as_view(), name="login"),
+    path("registration/", RegistrationView.as_view(), name="registration"),
+    path("login/", CustomLoginView.as_view(), name="login"),
 ]
