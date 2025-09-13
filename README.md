@@ -89,17 +89,22 @@ Follow these steps to set up the project locally:
    
    Finally: You should see on the left, next to path (env)
 
-   ```bash
-   (env) you/pfad/to/project>
-   ```
+   (env) your/pfad/to/project>
 
+   BONUS:
+   If you want deactivate, just write:
+   
+   ```bash
+   deactivate
+   ```
 
 3. Install the dependencies:
 
    ```bash
    pip install -r requirements.txt
 
-4. Configure the database:  
+4. Configure the database. But first, if you haven’t done this yet, check here 👉 [Database](#Database):
+   
    Run the migrations to initialize the database:
    
    ```bash
