@@ -9,6 +9,7 @@ A Django backend for a JavaScript-based freelancer platform. This repository pro
 - [About](#about)
 - [Features](#features)
 - [Technologies](#technologies)
+- [Database](#Database)
 - [Installation](#installation)
 ---
 
@@ -39,6 +40,10 @@ A Django backend for a JavaScript-based freelancer platform. This repository pro
 Additional dependencies can be found in the [requirements.txt](requirements.txt) file.
 
 ---
+
+## Database
+If you want to use SQLite as your database, go to:
+coderr_backend/coderr/settings.py and comment out lines 112–117 (the current database configuration).
 
 ## Installation
 
