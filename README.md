@@ -57,6 +57,12 @@ Follow these steps to set up the project locally:
    git clone git@github.com:dampolo/coderrbackend.git
    ```
 
+   go to the directory:
+
+   ```bash
+   cd coderr_backend
+   ```
+
 2. Create and activate a virtual environment with the following commands:
    
    A. Creat virtual environment
