@@ -45,6 +45,8 @@ Additional dependencies can be found in the [requirements.txt](requirements.txt)
 If you want to use SQLite as your database, go to:
 coderr_backend/coderr/settings.py and comment out lines 112–117 (the current database configuration).
 
+On the production we are using PostgreSQL Verison 17.
+
 ## Installation
 
 Follow these steps to set up the project locally:
