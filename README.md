@@ -1,33 +1,76 @@
-# Coderr-Backend
-Backend Applicaton for Coderr.
+# Coderr Backend
 
-Website:
-    - folgt
+A Django backend for a JavaScript-based freelancer platform. This repository provides the server-side application, handling authentication, project management, and other API endpoints to support a dynamic freelancer marketplace.
 
-GitHub:
-    `git clone https://github.com/dampolo/coderrbackend.git`
+---
 
-# Description
-The Coderr backend is a robust REST API built with Django and Django REST Framework (DRF). It supports functionalities such as user authentication, password reset, profile management, and review systems for business users.
+## Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+---
+
+## About
+
+**Coderr Backend** is built using Django and is designed to serve as the backend of a freelancer developer platform. It manages user authentication, project-related operations, and provides API endpoints that allow seamless integration with a JavaScript-based frontend. This project is structured to be modular, secure, and extendable.
+
+---
+
+## Features
+
+- **User Authentication:** Secure registration, login, and profile management.
+- **Project Management:** API endpoints for offering, ordering and reviewing software services.
+- **Modular Architecture:** Organized into separate Django apps for the accordingly feature: coderr_backend as core, auth_app, offer_app, order_app, review_app
+- **Media Management:** Handles file uploads (e.g., profile images, project documents) stored in `/media/images`.
+- **RESTful API Design:** Easy integration with modern JavaScript front-end frameworks.
+
+---
 
 ## Technologies
-- Django: 5.2
-- Django REST Framework: For API development  
-- SQLite: Standard database (can be configured)  
+
+- **Python 3** – The programming language used.
+- **Django** – The high-level Python web framework powering the backend.
+- **Django REST Framework:** For building RESTful APIs.
+- **PostgreSQL:** The default development database.
+
+Additional dependencies can be found in the [requirements.txt](requirements.txt) file.
+
+---
 
 ## Installation
 
-### Requirements
-Make sure you have Python 3.13 or higher and pip installed.
+Follow these steps to set up the project locally:
 
-1. Clone the repository:  
-   `git clone https://github.com/dampolo/coderrbackend.git`
+1. Clone the repository:
 
-2. Create and activate a virtual environment with the following commands:  
-   `"env/Scripts/activate" or env/Scripts/activate`  
-   `source env/bin/activate   # On Windows: env/Scripts/activate`
+   ```bash
+   git clone git@github.com:dampolo/joinbackend.git
 
-   You should see on the left, next to path (env)
+2. Create and activate a virtual environment with the following commands:
+   
+   Creat virtual environment
+
+   ```bash
+   python3 -m venv env
+
+   Activate virtual environment
+
+   On Windows
+   ```bash
+   "env/Scripts/activate"
+   
+   or try like follow
+
+   ```bash
+   env/Scripts/activate
+   
+   On Mac/Linux
+   ```bash     
+   `source env/bin/activate
+
+   Finally: You should see on the left, next to path (env)
 
 3. Install the dependencies:  
    `pip install -r requirements.txt`
@@ -35,27 +78,9 @@ Make sure you have Python 3.13 or higher and pip installed.
 4. Configure the database:  
    Run the migrations to initialize the database:  
    `python manage.py migrate`
-   
-   `python manage.py makemigrations`
 
 5. Start the development server:  
    `python manage.py runserver`
 
-## Troubleshooting
-If you encounter issues, check the following:
-
-- Ensure that the database is correctly configured and migrations have been run.
-- Verify the `requirements.txt` for the correct dependency versions.
-
-## Contributors
-Damian Poloczek
-
-## LINKS
-
-https://cdn.developerakademie.com/courses/Backend/EndpointDoku/index.html?name=coderr
-
-https://docs.google.com/document/d/1-gUz-skb24UTLAiY5Y-wYDB6GEYI4H9vnxATo-2QsOM/edit?tab=t.0#heading=h.oeodsmlvkdaa
-
-https://coderr.damianpoloczek.com/
-
-https://github.com/dampolo/coderrfrontend
+The backend should now be running at:
+http://127.0.0.1:8000/
