@@ -51,20 +51,20 @@ Follow these steps to set up the project locally:
 
 2. Create and activate a virtual environment with the following commands:
    
-   Creat virtual environment
-
+   A. Creat virtual environment
    ```bash
    python3 -m venv env
    ```
 
-   Activate virtual environment
+
+   B. Activate virtual environment
 
    On Windows
    ```bash
    "env/Scripts/activate"
    ```
-   or try like follow
 
+   or if it does not work, try like follow
    ```bash
    env/Scripts/activate
    ```
@@ -91,7 +91,8 @@ Follow these steps to set up the project locally:
    
    ```bash
    python manage.py makemigrations
-   
+   ```
+   and
    ```bash
    python manage.py migrate
 
