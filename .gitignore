@@ -6,6 +6,7 @@ __pycache__
 db.sqlite3
 
 media/images/*
+!media/images/.gitkeep
 # Backup files # 
 *.bak 
 
