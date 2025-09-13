@@ -54,7 +54,8 @@ Follow these steps to set up the project locally:
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:dampolo/joinbackend.git
+   git clone git@github.com:dampolo/coderrbackend.git
+   ```
 
 2. Create and activate a virtual environment with the following commands:
    
@@ -62,7 +63,6 @@ Follow these steps to set up the project locally:
    ```bash
    python3 -m venv env
    ```
-
 
    B. Activate virtual environment
 
