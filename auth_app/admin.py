@@ -7,7 +7,8 @@ from offers_app.models import Offer, OfferDetails
 class CustomProfile(admin.ModelAdmin):
     list_display = ["username", "type", "email"]
 
-
+# Profile
 admin.site.register(Profile, CustomProfile)
+# Offer
 admin.site.register(Offer, OfferDetails)
 
