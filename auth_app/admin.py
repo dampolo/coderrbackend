@@ -9,6 +9,5 @@ class CustomProfile(admin.ModelAdmin):
 
 
 admin.site.register(Profile, CustomProfile)
-admin.site.register(Offer)
+admin.site.register(Offer, OfferDetails)
 
-admin.site.register(OfferDetails)
