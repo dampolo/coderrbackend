@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 up.bat
+up.ps1
 
 media/images/*
 !media/images/.gitkeep
